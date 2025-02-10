@@ -1,0 +1,8 @@
+FROM registry.redhat.io/ubi9/python-312
+
+WORKDIR /
+COPY get_metrics.py /
+COPY requirements.txt /
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["python", "get_metrics.py"]

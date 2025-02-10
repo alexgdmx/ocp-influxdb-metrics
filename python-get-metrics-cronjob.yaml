@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: python-get-metrics
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: python-get-metrics
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - image: nexus.openshift.training:8090/python/get-ocp-metrics-by-api:v1.2
+            name: python-get-metrics
+            resources:
+              limits:
+                cpu: 200m
+                memory: 400Mi
+            env:
+            - name: CLUSTER_NAME
+              value: vmw.openshift.training
+            - name: API_ENDPOINT
+              value: api.vmw.openshift.training
+            - name: INFLUXDB_ENDPOINT
+              value: influxdb.apps.vmw.openshift.training
+          restartPolicy: OnFailure
+          serviceAccountName: python-cluster-view
+          serviceAccount: python-cluster-view
+  schedule: '* * * * *'
+status: {}

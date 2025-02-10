@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-certificate
+spec:
+
+  # The cert will be stored in a k8s secret. You choose the name of that secret.
+  secretName: grafana-certificate
+
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+
+  # CN for our cert
+  commonName: grafana.apps.vmw.openshift.training
+
+  # SAN, or Subject Alternative Names, to put in.
+  # ALWAYS include the CN as a SAN as well.
+  # see https://chromestatus.com/feature/4981025180483584
+  # and https://datatracker.ietf.org/doc/html/rfc2818 (search for 'common name')
+  dnsNames:
+  - grafana.apps.vmw.openshift.training

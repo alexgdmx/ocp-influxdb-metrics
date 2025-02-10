@@ -1,0 +1,41 @@
+sum ( container_fs_usage_bytes )  by(namespace)/1024/1024
+container_fs_usage_bytes
+container_fs_limit_bytes
+pod_name:container_fs_usage_bytes:sum
+
+oc get --raw /api/v1/nodes/node1/proxy/stats/summary | jq '.pods[] | select(.podRef.name=="pod1") | ."ephemeral-storage"'
+
+  kind: ClusterRole
+    name: insights-operator-gather
+      kind: ClusterVersion
+      name: version
+    - proxy
+    - nodes/proxy
+
+  kind: ClusterRole
+    name: kube-apiserver
+    - nodes/proxy
+
+  kind: ClusterRole
+    name: open-cluster-management:endpoint-observability-operator
+      kind: AppliedManifestWork
+      name: 7d64c553110d91182759be6f5dbc9631ea4edb5b5d411cac9c3f4faae7b41b47-sno-observability
+    - nodes/proxy
+
+  kind: ClusterRole
+    name: system:aggregate-to-edit
+    - pods/proxy
+    - services/proxy
+    - pods/proxy
+    - services/proxy
+
+  kind: ClusterRole
+    name: system:kubelet-api-admin
+    - proxy
+    - nodes/proxy
+
+  kind: ClusterRole
+    name: system:node-admin
+    - proxy
+    - nodes/proxy
+
