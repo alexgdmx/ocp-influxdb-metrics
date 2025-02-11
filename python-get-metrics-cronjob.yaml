@@ -27,8 +27,18 @@ spec:
               value: api.vmw.openshift.training
             - name: INFLUXDB_ENDPOINT
               value: influxdb.apps.vmw.openshift.training
+            volumeMounts:
+            - mountPath: /get_metrics.py
+              name: python-script-get-metrics
+              subPath: get_metrics.py
+              readOnly: true
           restartPolicy: OnFailure
           serviceAccountName: python-cluster-view
           serviceAccount: python-cluster-view
+          volumes:
+          - name: python-script-get-metrics
+            configMap:
+              name: python-script-get-metrics
+              defaultMode: 0755
   schedule: '* * * * *'
 status: {}
