@@ -10,4 +10,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: influxdb-sa
-  namespace: openshift-metrics
+  namespace: openshift-fiserv-metrics

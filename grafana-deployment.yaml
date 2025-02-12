@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana
-  namespace: openshift-metrics
+  namespace: openshift-fiserv-metrics
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
       serviceAccount: grafana-sa
       serviceAccountName: grafana-sa
       containers:
-      - image: nexus.openshift.training:8090/grafana/grafana:9.2.10
+      - image: fmk-prod.nexus-ci.onefiserv.net/vendor/ibm/ibmz/grafana@sha256:8e5e9ce6108bc908bbb1390b38a3ca2066892033ba34537b8b9a54ddb2932584
         name: grafana
         securityContext:
           allowPrivilegeEscalation: false

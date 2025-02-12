@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   name: grafana
 spec:
-  host: grafana.apps.vmw.openshift.training
+  host: grafana.apps.zopomint.ocpz.fiserv.one
   tls:
     insecureEdgeTerminationPolicy: None
     termination: passthrough

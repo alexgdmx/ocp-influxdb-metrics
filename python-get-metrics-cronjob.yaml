@@ -14,7 +14,7 @@ spec:
           creationTimestamp: null
         spec:
           containers:
-          - image: nexus.openshift.training:8090/python/get-ocp-metrics-by-api:v1.2
+          - image: fmk.nexus-ci.onefiserv.net/vendor/redhat/get-ocp-metrics-by-api:v1.0
             name: python-get-metrics
             resources:
               limits:
@@ -22,11 +22,11 @@ spec:
                 memory: 400Mi
             env:
             - name: CLUSTER_NAME
-              value: vmw.openshift.training
+              value: zopomint
             - name: API_ENDPOINT
-              value: api.vmw.openshift.training
+              value: api.zopomint.ocpz.fiserv.one
             - name: INFLUXDB_ENDPOINT
-              value: influxdb.apps.vmw.openshift.training
+              value: influxdb.apps.zopomint.ocpz.fiserv.one
           restartPolicy: OnFailure
           serviceAccountName: python-cluster-view
           serviceAccount: python-cluster-view

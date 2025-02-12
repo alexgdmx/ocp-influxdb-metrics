@@ -16,7 +16,7 @@ spec:
       serviceAccount: influxdb-sa
       serviceAccountName: influxdb-sa
       containers:
-      - image: nexus.openshift.training:8090/influxdata/influxdb:1.11
+      - image: fmk-prod.nexus-ci.onefiserv.net/vendor/ibm/cpopen/cpfs/influxdb:FMK-DIGEST-sha256-51dce907d27d94f593cae39022ff451abc661f8dc616c385a5b91b23054d26f2
         securityContext:
           fsGroup: 1500
           # allowPrivilegeEscalation: false

@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   name: influxdb
 spec:
-  host: influxdb.apps.vmw.openshift.training
+  host: influxdb.apps.zopomint.ocpz.fiserv.one
   port:
     targetPort: port-1
   tls:

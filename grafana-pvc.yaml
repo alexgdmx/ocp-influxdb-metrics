@@ -3,10 +3,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: grafana-pvc
 spec:
-  storageClassName: nfs-csi
+  storageClassName: 2replicas-ocs-storagecluster-ceph-rbd
   resources:
     requests:
       storage: 5Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce

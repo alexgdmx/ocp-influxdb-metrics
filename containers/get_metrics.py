@@ -115,7 +115,8 @@ def send_data_influx(data):
     node_start_time = data['node']['startTime']
     node_name = data['node']['nodeName']
 
-    for k in ['cpu', 'memory', 'fs', 'rlimit', 'swap', 'imageFs', 'containerFs']:
+    for k in ['cpu', 'memory', 'fs', 'rlimit', 'imageFs', 'containerFs']:
+        pprint( data['node'])
         field_time = data['node'][k]['time'] if k not in ['imageFs', 'containerFs'] else data['node']['runtime'][k]['time']
         pointValues = {
                 # "time": int(datetime.strptime(field_time, "%Y-%m-%dT%H:%M:%SZ").strftime('%s')),
