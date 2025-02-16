@@ -68,4 +68,4 @@ spec:
             secretName: influxdb-certificate
         - name: influxdb-pvc
           persistentVolumeClaim:
-            claimName: influxdb-pvc
+            claimName: influxdb-pvc 

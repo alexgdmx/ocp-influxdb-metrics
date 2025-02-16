@@ -36,13 +36,15 @@ def get_resourcequota():
         except ApiException as e:
             print("Exception when calling CoreV1Api->list_resource_quota_for_all_namespaces: %s\n" % e)
 
-    for v in api_response.items:
-        print(v.metadata.namespace,
-            v.status.hard['limits.cpu'], 
-            v.status.hard['limits.memory'], 
-            v.status.used['limits.cpu'], 
-            v.status.used['limits.memory'])
+    # for v in api_response.items:
+    #     print(v.metadata.namespace,
+    #         v.status.hard['limits.cpu'], 
+    #         v.status.hard['limits.memory'], 
+    #         v.status.used['limits.cpu'], 
+    #         v.status.used['limits.memory'])
+    return api_response
 
+    
 def get_namespace(label):
     with client.ApiClient(configuration) as api_client:
         api_instance = client.CoreV1Api(api_client)
@@ -115,27 +117,42 @@ def send_data_influx(data):
     node_start_time = data['node']['startTime']
     node_name = data['node']['nodeName']
 
-    for k in ['cpu', 'memory', 'fs', 'rlimit', 'imageFs', 'containerFs']:
-        pprint( data['node'])
-        field_time = data['node'][k]['time'] if k not in ['imageFs', 'containerFs'] else data['node']['runtime'][k]['time']
-        pointValues = {
-                # "time": int(datetime.strptime(field_time, "%Y-%m-%dT%H:%M:%SZ").strftime('%s')),
-                "time": field_time,
-                "measurement": 'node_' + k,
-                "fields": data['node'][k] if k not in ['imageFs', 'containerFs'] else data['node']['runtime'][k],
-                "tags": {
-                    "node_name": node_name,
-                    "cluster_name": cluster_name, 
-                },
-            }
-        # print(k)
-        if k in ['imageFs', 'containerFs']:
-            pointValues['tags'].update({'runtime': 1})
-            
-        pointValues['fields'].pop('time')
-        # pointValues['fields'].update({'startTime': node_start_time})
-        pointValues['fields'].update({'node_start_time': node_start_time})
-        series.append(pointValues)
+    for nk, nv in data['node'].items():
+        if isinstance(nv, dict) and nk not in ['systemContainers', 'network']:
+            if nk == 'runtime':
+                for rtk, rtv in nv.items():
+                    if isinstance(rtv, dict):
+                        field_time = rtv['time']
+                        pointValues = {
+                                "time": field_time,
+                                "measurement": 'node_' + nk + '_' + rtk,
+                                "fields": rtv,
+                                "tags": {
+                                    "node_name": node_name,
+                                    "cluster_name": cluster_name,
+                                    "runtime": 1,
+                                },
+                            }
+
+                        pointValues['fields'].pop('time')
+                        pointValues['fields'].update({'node_start_time': node_start_time})
+                        series.append(pointValues)
+            else:
+                pointValues = {
+                        "time": nv['time'],
+                        "measurement": 'node_' + nk,
+                        "fields": nv,
+                        "tags": {
+                            "node_name": node_name,
+                            "cluster_name": cluster_name, 
+                        },
+                    }
+
+                pointValues['fields'].pop('time')
+                pointValues['fields'].update({'node_start_time': node_start_time})
+                series.append(pointValues)
+        
+        # pprint(series)
 
     for sc in data['node']['systemContainers']:
         for k,v in sc.items():

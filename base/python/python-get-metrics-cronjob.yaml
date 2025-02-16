@@ -27,8 +27,18 @@ spec:
               value: api.zopomint.ocpz.fiserv.one
             - name: INFLUXDB_ENDPOINT
               value: influxdb.apps.zopomint.ocpz.fiserv.one
+            volumeMounts:
+            - mountPath: /get_metrics.py
+              name: python-script-get-metrics
+              subPath: get_metrics.py
+              readOnly: true
           restartPolicy: OnFailure
           serviceAccountName: python-cluster-view
           serviceAccount: python-cluster-view
+          volumes:
+          - name: python-script-get-metrics
+            configMap:
+              name: python-script-get-metrics
+              defaultMode: 0755
   schedule: '* * * * *'
 status: {}
