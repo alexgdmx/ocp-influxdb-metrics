@@ -22,11 +22,20 @@ spec:
                 memory: 400Mi
             env:
             - name: CLUSTER_NAME
-              value: zopomint
+              valueFrom:
+                configMapKeyRef:
+                  name: python-cron-env-vars
+                  key: cluster_name
             - name: API_ENDPOINT
-              value: api.zopomint.ocpz.fiserv.one
+              valueFrom:
+                configMapKeyRef:
+                  name: python-cron-env-vars
+                  key: api_endpoint
             - name: INFLUXDB_ENDPOINT
-              value: influxdb.apps.zopomint.ocpz.fiserv.one
+              valueFrom:
+                configMapKeyRef:
+                  name: python-cron-env-vars
+                  key: influxdb_endpoint
             volumeMounts:
             - mountPath: /get_metrics.py
               name: python-script-get-metrics
