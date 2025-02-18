@@ -1,0 +1,17 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  name: influxdb
+spec:
+  host: influxdb.apps.zopomint.ocpz.fiserv.one
+  port:
+    targetPort: port-1
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: passthrough
+  to:
+    kind: ""
+    name: influxdb
+    weight: null
+status: {}

@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: openshift-fiserv-metrics
+resources:
+- ../../base
+patches:
+- patch: |-
+    - op: replace
+      path: /spec/storageClassName 
+      value: 2replicas-ocs-storagecluster-ceph-rbd
+    - op: replace
+      path: /spec/resources/requests/storage
+      value: 5Gi
+  target:
+    kind: PersistentVolumeClaim
+    name: grafana-pvc
+- patch: |-
+    - op: replace
+      path: /spec/host
+      value: grafana.apps.zopomint.ocpz.fiserv.one
+  target:
+    kind: Route
+    name: grafana
+- patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/cpu
+      value: 3
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/memory
+      value: 3Gi
+  target:
+    kind: Deployment
+    name: grafana
+configMapGenerator:
+- name: python-cron-env-vars
+  literals:
+    - cluster_name="zopomint"
+    - api_endpoint="api.zopomint.ocpz.fiserv.one"
+    - influxdb_endpoint="influxdb.apps.zopomint.ocpz.fiserv.one"
+

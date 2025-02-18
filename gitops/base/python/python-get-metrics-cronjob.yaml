@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: python-get-metrics
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: python-get-metrics
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - image: fmk.nexus-ci.onefiserv.net/vendor/redhat/get-ocp-metrics-by-api:v1.0
+            name: python-get-metrics
+            resources:
+              limits:
+                cpu: 200m
+                memory: 400Mi
+            env:
+            - name: CLUSTER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: python-cron-env-vars
+                  key: cluster_name
+            - name: API_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: python-cron-env-vars
+                  key: api_endpoint
+            - name: INFLUXDB_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: python-cron-env-vars
+                  key: influxdb_endpoint
+            volumeMounts:
+            - mountPath: /get_metrics.py
+              name: python-script-get-metrics
+              subPath: get_metrics.py
+              readOnly: true
+          restartPolicy: OnFailure
+          serviceAccountName: python-cluster-view
+          serviceAccount: python-cluster-view
+          volumes:
+          - name: python-script-get-metrics
+            configMap:
+              name: python-script-get-metrics
+              defaultMode: 0755
+  schedule: '* * * * *'
+status: {}
